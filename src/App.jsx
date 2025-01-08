@@ -3,6 +3,7 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
+import BlogForm from './components/Blogform'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -22,7 +23,7 @@ const App = () => {
       if (loggedUserJSON) {
         const user = JSON.parse(loggedUserJSON)
         setUser(user)
-        //blogService.setToken(user.token)
+        blogService.setToken(user.token)
       }
   }, [])
 
@@ -38,6 +39,8 @@ const App = () => {
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
       )
+
+      blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
@@ -49,11 +52,18 @@ const App = () => {
     }
   }
 
-  const addBlog = (event) => {
-    event.preventDefault()
-    const blogObject = {
-      
+  const addBlog = async (blogObject) => {
+    try {
+      const returnedBlog = await blogService.create(blogObject)
+      setBlogs(blogs.concat(returnedBlog))
+    } catch (error) {
+      setErrorMessage('not possible')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+
     }
+      
   }
 
   const loginForm = () => (
@@ -87,35 +97,38 @@ const App = () => {
     window.localStorage.removeItem('loggedBlogappUser')
   }
 
-  const blogForm = () => (
-    <div>
-      <h2>Blogs</h2>
+  
+
+
+  
+
+    
+      if (user === null) {
+        return (
+          <div>
+      <Notification message={errorMessage} />
+          {loginForm()}
+          </div>
+        )
+      }
+
+      return (
+        <div>
+          <Notification message={errorMessage} />
+          <h2>Blogs</h2>
       <p>{user.name} logged in</p>
       <button onClick={logOutButton}>
         log out
       </button>
-    {blogs.map(blog =>
+          <div>
+            <BlogForm createBlog={addBlog} />
+          </div>
+        <h2>All blogs</h2>
+          {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
-    </div>
-  )
-
-
-  // <form onSubmit= {addBlog}>
-  //     <input
-  //       value={newBlog}
-  //       onChange={handleBlogChange}
-  //     />
-  //     <button type="submit">save</button>
-  // </form>
-
-  return (
-    <div>
-      <Notification message={errorMessage} />
-      {!user && loginForm()}
-      {user && blogForm()}
-    </div>
-  )
+        </div>
+      )
 }
 
 export default App
