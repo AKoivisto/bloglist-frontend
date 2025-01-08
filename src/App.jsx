@@ -45,7 +45,7 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (expection) {
-      setErrorMessage('wrong credentials')
+      setErrorMessage('Wrong username or password')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
@@ -56,8 +56,13 @@ const App = () => {
     try {
       const returnedBlog = await blogService.create(blogObject)
       setBlogs(blogs.concat(returnedBlog))
+      setErrorMessage(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+      
     } catch (error) {
-      setErrorMessage('not possible')
+      setErrorMessage('Title or url missing')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
