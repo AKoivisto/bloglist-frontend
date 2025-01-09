@@ -101,7 +101,7 @@ const App = () => {
 }
 
 const blogForm = () => {
-  const hideWhenVisible = { display: createVisible? 'none' : '' }
+  const hideWhenVisible = { display: createVisible ? 'none' : '' }
   const showWhenVisible = { display: createVisible ? '' : 'none' }
 
   return (
@@ -116,11 +116,7 @@ const blogForm = () => {
     </div>
     </div>
   )
-
-
 }
-
-
 
   const logOutButton = () => {
     window.localStorage.removeItem('loggedBlogappUser')
