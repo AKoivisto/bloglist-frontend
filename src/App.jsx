@@ -186,7 +186,7 @@ const blogForm = () => {
          {blogForm()}
         <h2>All blogs</h2>
           {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} updateLikes={updateLikes} deleteBlog={deleteBlog} />
+        <Blog key={blog.id} blog={blog} user={user} updateLikes={updateLikes} deleteBlog={deleteBlog} />
       )}
         </div>
       )
