@@ -80,13 +80,13 @@ const App = () => {
       id: blog.id,
       title: blog.title,
       author: blog.author,
-      url: blog.author,
+      url: blog.url,
       likes: blog.likes +1,
       user: blog.user.id,
     }
     try {
       const returnedBlog = await blogService.update(blog.id, toUpdate)
-      setBlogs(blogs.map(blog => (blog.id === toUpdate.id ? toUpdate : blog)))
+      setBlogs(blogs.map(blog => (blog.id === returnedBlog.id ? returnedBlog : blog)))
     } catch (error) {
       setErrorMessage('Error in updating likes')
       setTimeout(() => {
