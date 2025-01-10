@@ -75,6 +75,28 @@ const App = () => {
       
   }
 
+  const updateLikes = async (blog) => {
+    const toUpdate = {
+      id: blog.id,
+      title: blog.title,
+      author: blog.author,
+      url: blog.author,
+      likes: blog.likes +1,
+      user: blog.user.id,
+    }
+    try {
+      const returnedBlog = await blogService.update(blog.id, toUpdate)
+      setBlogs(blogs.map(blog => (blog.id === toUpdate.id ? toUpdate : blog)))
+    } catch (error) {
+      setErrorMessage('Error in updating likes')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+
+
+  }
+
   const loginForm = () => {
     const hideWhenVisible = { display: loginVisible ? 'none' : '' }
     const showWhenVisible = { display: loginVisible ? '' : 'none' }
@@ -142,7 +164,7 @@ const blogForm = () => {
          {blogForm()}
         <h2>All blogs</h2>
           {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} updateLikes={updateLikes} />
       )}
         </div>
       )
