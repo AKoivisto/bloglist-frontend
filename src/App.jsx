@@ -17,8 +17,8 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
+      setBlogs(sortBlogs(blogs))
+    )
   }, [])
 
   useEffect(() => {
@@ -75,6 +75,10 @@ const App = () => {
       
   }
 
+  const sortBlogs = (blogs) => {
+    return blogs.sort((a, b) => b.likes - a.likes);
+  }
+
   const updateLikes = async (blog) => {
     const toUpdate = {
       id: blog.id,
@@ -86,16 +90,34 @@ const App = () => {
     }
     try {
       const returnedBlog = await blogService.update(blog.id, toUpdate)
-      setBlogs(blogs.map(blog => (blog.id === returnedBlog.id ? returnedBlog : blog)))
+      setBlogs(sortBlogs(blogs.map(blog => (blog.id === returnedBlog.id ? returnedBlog : blog))))
     } catch (error) {
       setErrorMessage('Error in updating likes')
       setTimeout(() => {
         setErrorMessage(null)
-      }, 5000)
-    }
-
-
+      }, 5000)}
   }
+
+  const deleteBlog = async (blog) => {
+
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`))
+    {
+      try {
+        await blogService.remove(blog.id)
+        setBlogs(sortBlogs(blogs.filter((b) => b.id !== blog.id)))
+        setErrorMessage(`Deleted blog ${blog.title}`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      } catch {
+        setErrorMessage('Deleting blog is not possible')
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)} 
+    }
+   
+  }
+  
 
   const loginForm = () => {
     const hideWhenVisible = { display: loginVisible ? 'none' : '' }
@@ -164,7 +186,7 @@ const blogForm = () => {
          {blogForm()}
         <h2>All blogs</h2>
           {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} updateLikes={updateLikes} />
+        <Blog key={blog.id} blog={blog} updateLikes={updateLikes} deleteBlog={deleteBlog} />
       )}
         </div>
       )
