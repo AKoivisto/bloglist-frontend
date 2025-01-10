@@ -23,11 +23,11 @@ const App = () => {
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-      if (loggedUserJSON) {
-        const user = JSON.parse(loggedUserJSON)
-        setUser(user)
-        blogService.setToken(user.token)
-      }
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
+    }
   }, [])
 
   const handleLogin = async (event) => {
@@ -64,7 +64,6 @@ const App = () => {
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
-      
     } catch (error) {
       setErrorMessage('Title or url missing')
       setTimeout(() => {
@@ -72,11 +71,10 @@ const App = () => {
       }, 5000)
 
     }
-      
   }
 
   const sortBlogs = (blogs) => {
-    return blogs.sort((a, b) => b.likes - a.likes);
+    return blogs.sort((a, b) => b.likes - a.likes)
   }
 
   const updateLikes = async (blog) => {
@@ -112,11 +110,9 @@ const App = () => {
         setErrorMessage('Deleting blog is not possible')
         setTimeout(() => {
           setErrorMessage(null)
-        }, 5000)} 
+        }, 5000)}
     }
-   
   }
-  
 
   const loginForm = () => {
     const hideWhenVisible = { display: loginVisible ? 'none' : '' }
@@ -124,71 +120,71 @@ const App = () => {
 
 
     return (
-    <div>
-      <h2>Log in to application </h2>
-      <div style={hideWhenVisible}>
-        <button onClick={() => setLoginVisible(true)}>log in</button>
-      </div>
-      <div style={showWhenVisible}>
-      <LoginForm
+      <div>
+        <h2>Log in to application </h2>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setLoginVisible(true)}>log in</button>
+        </div>
+        <div style={showWhenVisible}>
+          <LoginForm
             username={username}
             password={password}
-            handleUsernameChange={({target}) => setUsername(target.value)}
-            handlePasswordChange={({target}) => setPassword(target.value)}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
             handleSubmit={handleLogin}
           />
-      <button onClick={() => setLoginVisible(false)}>cancel</button>
+          <button onClick={() => setLoginVisible(false)}>cancel</button>
+        </div>
       </div>
-    </div>
-  )
-}
+    )
+  }
 
-const blogForm = () => {
-  const hideWhenVisible = { display: createVisible ? 'none' : '' }
-  const showWhenVisible = { display: createVisible ? '' : 'none' }
+  const blogForm = () => {
+    const hideWhenVisible = { display: createVisible ? 'none' : '' }
+    const showWhenVisible = { display: createVisible ? '' : 'none' }
 
-  return (
-    <div>
-    <div style={hideWhenVisible}>
-      <button onClick={() => setCreateVisible(true)}>New blog</button>
-    </div>
-    <div style={showWhenVisible}>
-      <h2>Create new blog</h2>
-      <BlogForm createBlog={addBlog}/>
-      <button onClick={() => setCreateVisible(false)}>cancel</button>
-    </div>
-    </div>
-  )
-}
+    return (
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setCreateVisible(true)}>New blog</button>
+        </div>
+        <div style={showWhenVisible}>
+          <h2>Create new blog</h2>
+          <BlogForm createBlog={addBlog}/>
+          <button onClick={() => setCreateVisible(false)}>cancel</button>
+        </div>
+      </div>
+    )
+  }
 
   const logOutButton = () => {
     window.localStorage.removeItem('loggedBlogappUser')
   }
 
-      if (user === null) {
-        return (
-          <div>
-      <Notification message={errorMessage} />
-      {loginForm()}
-          </div>
-        )
-      }
+  if (user === null) {
+    return (
+      <div>
+        <Notification message={errorMessage} />
+        {loginForm()}
+      </div>
+    )
+  }
 
-      return (
-        <div>
-          <Notification message={errorMessage} />
-          <h2>Blogs</h2>
+  return (
+    <div>
+      <Notification message={errorMessage} />
+      <h2>Blogs</h2>
       <p>{user.name} logged in</p>
       <button onClick={logOutButton}>
-        log out
+    log out
       </button>
-         {blogForm()}
-        <h2>All blogs</h2>
-          {blogs.map(blog =>
+      {blogForm()}
+      <h2>All blogs</h2>
+      {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} user={user} updateLikes={updateLikes} deleteBlog={deleteBlog} />
       )}
-        </div>
-      )
+    </div>
+  )
 }
 
 export default App
