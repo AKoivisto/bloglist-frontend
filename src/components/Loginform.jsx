@@ -12,6 +12,7 @@ const LoginForm = (props) => {
             value={props.username}
             name="Username"
             onChange={props.handleUsernameChange}
+            data-testid='username'
           />
         </div>
         <div>
@@ -21,6 +22,7 @@ const LoginForm = (props) => {
             value={props.password}
             name="Password"
             onChange={props.handlePasswordChange}
+            data-testid='password'
           />
         </div>
         <button type="submit">login</button>
