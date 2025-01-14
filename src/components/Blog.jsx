@@ -16,23 +16,29 @@ const Blog = ({ blog, updateLikes, deleteBlog, user }) => {
 
   return (
     <div>
-      <div style={{ ...hideWhenVisible, ...blogstyle }}>
-        {blog.title} {blog.author}
-        <button style={{ marginLeft: '5px' }} onClick={() => handleShowDetails(true)}>view</button>
-      </div>
-      <div style={{ ...showWhenVisible, ...blogstyle }}>
-        {blog.title} {blog.author}
-        <button style={{ marginLeft: '5px' }} onClick={() => handleShowDetails(false)}>hide</button>
-        <div>{blog.url}</div>
-        <div>
-          likes {blog.likes}
-          <button style={{ marginLeft: '5px' }} onClick={() => updateLikes(blog)}>like</button>
-        </div>
-        {blog.user.name}
-        {blog.user.username === user.username && (
+      <div style={blogstyle}>
+        {! showDetails ? (
           <div>
-            <button style={{ marginLeft: '5px' }} onClick={() => deleteBlog(blog)}>delete blog</button>
+            {blog.title} {blog.author}
+            <button style={{ marginLeft: '5px' }} onClick={() => handleShowDetails(true)}>view</button>
           </div>
+        ) : (
+          <div>
+            {blog.title} {blog.author}
+            <button style={{ marginLeft: '5px' }} onClick={() => handleShowDetails(false)}>hide</button>
+            <div>{blog.url}</div>
+            <div>
+              likes {blog.likes}
+              <button style={{ marginLeft: '5px' }} onClick={() => updateLikes(blog)}>like</button>
+            </div>
+            {blog.user.name}
+            {blog.user.username === user.username && (
+              <div>
+                <button style={{ marginLeft: '5px' }} onClick={() => deleteBlog(blog)}>delete blog</button>
+              </div>
+            )}
+          </div>
+
         )}
       </div>
     </div>
